@@ -35,24 +35,31 @@ void display()
     }
     glPushMatrix();
         glScalef(0.3,0.3,0.3);///week13 step02-3
-        if( show[0] ) glmDraw(head, GLM_MATERIAL);///week13 step02-2
+        glPushMatrix();///week13 step03-2
+            glTranslatef( teapotX,teapotY,0 );///week13 step03-2
+            if( show[0] ) glmDraw(head, GLM_MATERIAL);///week13 step02-2
+        glPopMatrix();///week13 step03-2
         if( show[1] ) glmDraw(body, GLM_MATERIAL);///week13 step02-3
         if( show[2] ) glmDraw(upleft_arm, GLM_MATERIAL);///week13 step02-3
         if( show[3] ) glmDraw(lowleft_arm, GLM_MATERIAL);///week13 step02-3
     glPopMatrix();
     glutSwapBuffers();
 }
+int oldX=0, oldY=0;///week13 step03-2
 void mouse(int button, int state, int x, int y)
 {
     if(state==GLUT_DOWN){
-        teapotX = (x-150)/150.0;
-        teapotY = (150-y)/150.0;
-        angle = x;
-        printf("glTranslatef(%f, %f, 0);\n", teapotX, teapotY);
-        if(fout==NULL) fout = fopen("file4.txt", "w"); ///step02-2 沒開檔,就開
-        ///fprintf(fout, "%f %f\n", teapotX, teapotY); ///step02-2 要再存座標
+            oldX = x;
+            oldY = y;
     }
-    display();
+}
+void motion( int x,int y )///week13 step03-2
+{
+    teapotX += ( x - oldX )/150.0;
+    teapotY -= ( y - oldY )/150.0;
+    oldX = x;
+    oldY = y;
+    glutPostRedisplay();
 }
 ///void keyboard(unsigned char key, int x, int y) ///step02-2 keyboard函式
 ///{
@@ -69,6 +76,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutCreateWindow("week13");
 
+    glutMotionFunc(motion);///week13 step03-2
     glutDisplayFunc(display);
     glutMouseFunc(mouse);
     glutKeyboardFunc(keyboard); ///step02-2 keyboard要做事囉(開檔、讀檔)
