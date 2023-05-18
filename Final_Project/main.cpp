@@ -8,17 +8,18 @@ GLMmodel * body = NULL;
 GLMmodel * upleft_arm = NULL;
 GLMmodel * lowleft_arm = NULL;
 
-int show[4] = {1,0,0,0};///week13 step03-1 1代表出現
+int show[4] = {1,1,1,1};///week14_step03_1 都秀出來///week13 step03-1 1代表出現
+int ID = 2;///WEEK14_STEP03-1 設定關節 ID
 FILE * fout = NULL; ///step02-2 一開始,檔案沒有開, NULL
 FILE * fin = NULL; ///step02-2 要讀檔用的指標, 一開始也是 NULL
 float teapotX=0, teapotY=0; ///幫我們看移動值
 float angle=0, angle2=0, angle3=0;///step03-2 擺動作
 void keyboard(unsigned char key, int x, int y )
 {
-    if ( key=='0' ) show[0] =! show[0];///week13 step03-1
-    if ( key=='1' ) show[1] =! show[1];///week13 step03-1
-    if ( key=='2' ) show[2] =! show[2];///week13 step03-1
-    if ( key=='3' ) show[3] =! show[3];///week13 step03-1
+    if ( key=='0' ) ID = 0///WEEK14_STEP03-1 ///show[0] =! show[0];///week13 step03-1
+    if ( key=='1' ) ID = 1///WEEK14_STEP03-1 ///show[1] =! show[1];///week13 step03-1
+    if ( key=='2' ) ID = 2///WEEK14_STEP03-1 ///show[2] =! show[2];///week13 step03-1
+    if ( key=='3' ) ID = 3///WEEK14_STEP03-1 ///show[3] =! show[3];///week13 step03-1
     glutPostRedisplay();///week13 step03-1
 }
 void display()
@@ -37,11 +38,24 @@ void display()
         glScalef(0.3,0.3,0.3);///week13 step02-3
         glPushMatrix();///week13 step03-2
             glTranslatef( teapotX,teapotY,0 );///week13 step03-2
+
+            if ( ID ==0 ) glColor3f(1,0,0);///week14_step03_1 秀紅色
+            else glColor3f(1,1,1);///week14_step03_1
             if( show[0] ) glmDraw(head, GLM_MATERIAL);///week13 step02-2
         glPopMatrix();///week13 step03-2
+
+        if ( ID ==1 ) glColor3f(1,0,0);///week14_step_1 秀紅色
+        else glColor3f(1,1,1);///week14_step03_1 秀白色
         if( show[1] ) glmDraw(body, GLM_MATERIAL);///week13 step02-3
+
+        if ( ID==2 ) glColor3f(1,0,0);///week14_step03-1 秀紅色
+        else glColor3f(1,1,1);///week14_step03_1 秀白色
         if( show[2] ) glmDraw(upleft_arm, GLM_MATERIAL);///week13 step02-3
+
+        if ( ID==3 ) glColor3f(1,0,0);///week14_step03_1 秀紅色
+        else glColor3f(1,1,1);///week14_step03_1 秀白色
         if( show[3] ) glmDraw(lowleft_arm, GLM_MATERIAL);///week13 step02-3
+
     glPopMatrix();
     glutSwapBuffers();
 }
