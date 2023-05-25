@@ -1,3 +1,4 @@
+///week15_03_03
 ///week12-5_TRT_keyboard_mouse 要用 keyboard mouse 來操控
 #include <stdio.h>
 #include <GL/glut.h>
@@ -22,7 +23,8 @@ void keyboard(unsigned char key, int x, int y) {/// week13 step03-1
 FILE * fout = NULL; ///step02-2 一開始,檔案沒有開, NULL
 FILE * fin = NULL; ///step02-2 要讀檔用的指標, 一開始也是 NULL
 float teapotX=0, teapotY=0; ///幫我們看移動值
-float angle=0, angle2=0, angle3=0;///step03-2 擺動作
+float angle[20]= {};///week1503_03
+///float angle=0, angle2=0, angle3=0;///step03-2 擺動作
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -45,7 +47,7 @@ void display()
 
         glPushMatrix();
             glTranslatef(-1.200000, +0.453333, 0); ///wee14_step03-1 反過來
-            glRotatef(angle, 0, 0, 1); ///week14_step03-1_TRT建出來
+            glRotatef(angle[2], 0, 0, 1); ///week14_step03-1_TRT建出來
             //glTranslatef(teapotX, teapotY, 0); ///week14_step03-1_TRT建出來
             glTranslatef(1.200000, -0.453333, 0); ///week14_step03-1_的結果
 
@@ -54,7 +56,7 @@ void display()
             if(show[2]) glmDraw(uparmR, GLM_MATERIAL);///Week13 step03-1
             glPushMatrix();
                 glTranslatef(-1.959999, +0.113333, 0);
-                glRotatef(angle, 0, 0, 1);
+                glRotatef(angle[3], 0, 0, 1);
                 glTranslatef(1.959999, -0.113333, 0);
 
                 if(ID==3) glColor3f(1,0,0); ///選定的,設紅色
@@ -74,7 +76,7 @@ void motion(int x, int y){ ///Week13 step03-2
     teapotY -= (y - oldY)/150.0; ///Week13 step03-2
     oldX = x;
     oldY = y;
-    angle = x; ///week14_step03-1
+    angle[ID] = x; ///week14_step03-1
     printf("glTranslatef(%f, %f, 0);\n", teapotX, teapotY);
     glutPostRedisplay(); ///Week13 step03-2
 } ///Week13 step03-2
@@ -83,7 +85,7 @@ void mouse(int button, int state, int x, int y)
     if(state==GLUT_DOWN){
         oldX = x; ///teapotX = (x-150)/150.0;
         oldY = y; ///teapotY = (150-y)/150.0;
-        angle = x;
+        angle[ID] = x;
         ///printf("glTranslatef(%f, %f, 0);\n", teapotX, teapotY);
         ///if(fout==NULL) fout = fopen("file4.txt", "w"); ///step02-2 沒開檔,就開
         ///fprintf(fout, "%f %f\n", teapotX, teapotY); ///step02-2 要再存座標
