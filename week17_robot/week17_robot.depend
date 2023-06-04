@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1685809378 source:c:\users\user\onedrive\2023graphicsb\week17_robot\main.cpp
+1685858885 source:c:\users\user\onedrive\2023graphicsb\week17_robot\main.cpp
 	<opencv/highgui.h>
 	<opencv/cv.h>
 	<stdio.h>

@@ -13,9 +13,40 @@ GLMmodel * l_leg = NULL, * r_leg = NULL;///機器人的兩隻腳
 
 float teapotX = 0, teapotY = 0, oldX = 0, oldY = 0;
 float angle[20] = {}, angle2[20] = {};///原本是float angle = 0, angle2=0
+float NewAngle[20] = {}, NewAngle2[20] = {};
+float OldAngle[20] = {}, OldAngle2[20] = {};
 int ID = 0;///ID會判斷鍵盤按到是哪一個關節要動
 FILE * fout = NULL;///寫檔案
 FILE * fin = NULL;///讀檔案
+
+
+void timer(int t)
+{
+    printf("現在timer(%d)\n", t);
+    glutTimerFunc(20,timer,t+1);///馬上設定下個鬧鐘
+
+    float alpha = (t%50)/50.0;///0.0~1.0
+
+    if (t%50==0)
+    {
+        if(fin==NULL) fin = fopen("motion.txt","r");
+        for ( int i=0;i<20;i++ )
+        {
+            OldAngle[i] = NewAngle[i];
+            OldAngle2[i] = NewAngle2[i];
+            fscanf(fin,"%f",&NewAngle[i]);
+            fscanf(fin,"%f",&NewAngle2[i]);
+        }
+    }
+    for ( int i=0;i<20;i++)
+    {
+        angle[i] = NewAngle[i] * alpha + OldAngle[i] * (1-alpha);
+        angle2[i] = NewAngle2[i] * alpha + OldAngle2[i] * (1-alpha);
+
+    }
+
+    glutPostRedisplay();
+}
 void keyboard(unsigned char key, int x, int y)///鍵盤控制的函式
 {
     if ( key=='0' ) ID = 0;
@@ -28,7 +59,7 @@ void keyboard(unsigned char key, int x, int y)///鍵盤控制的函式
     if ( key=='7' ) ID = 7;
     if ( key=='8' ) ID = 8;
     if ( key=='9' ) ID = 9;
-    if ( key=='s' ) {///SAVE存檔
+    if ( key=='s' ) {///SAVE存檔,會動到motion檔案
         if (fout == NULL) fout = fopen("motion.txt","w");
         for(int i=0; i<20; i++)
         {
@@ -38,7 +69,7 @@ void keyboard(unsigned char key, int x, int y)///鍵盤控制的函式
         fprintf(fout,"\n");
         printf("寫了一行");
     }
-    if (key=='r'){///read 讀檔
+    if (key=='r'){///read 讀檔會,動到motion檔案
         if(fin == NULL) fin = fopen("motion.txt", "r");
         for(int i=0;i<20;i++){
             fscanf(fin, "%f", &angle[i]);
@@ -46,7 +77,9 @@ void keyboard(unsigned char key, int x, int y)///鍵盤控制的函式
         }
         glutPostRedisplay();
     }
-
+    if (key=='p'){///play播放 會動到motion檔案
+        glutTimerFunc(0,timer,0);
+    }
 }
 int myTexture(char * filename)///貼圖
 {
